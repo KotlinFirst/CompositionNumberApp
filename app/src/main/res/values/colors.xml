@@ -7,4 +7,16 @@
     <color name="teal_700">#FF018786</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+    <color name="easy_level">#689F38</color>
+    <color name="normal_level">#FAB815</color>
+    <color name="hard_level">#A51414</color>
+    <color name="oval">#8429AA</color>
+    <color name="option1">#E64A19</color>
+    <color name="option2">#50B3E8</color>
+    <color name="option3">#A878B3</color>
+    <color name="option4">#8205B6</color>
+    <color name="option5">#FB1B1B</color>
+    <color name="option6">#4B61ED</color>
+    <color name="question_game_fragment">#00796B</color>
+    <color name="progress_bar_tint">#339E05</color>
 </resources>
