@@ -16,7 +16,7 @@ import java.lang.RuntimeException
 
 class FinishGameFragment : Fragment() {
 
-    private lateinit var gameResult:GameResult
+    private lateinit var gameResult: GameResult
 
     private var _binding: FragmentFinishGameBinding? = null
     private val binding: FragmentFinishGameBinding
@@ -37,13 +37,14 @@ class FinishGameFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner,object : OnBackPressedCallback(true){
-            override fun handleOnBackPressed() {
-                retryGame()
-            }
-        })
+        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner,
+            object : OnBackPressedCallback(true) {
+                override fun handleOnBackPressed() {
+                    retryGame()
+                }
+            })
         binding.buttonRetry.setOnClickListener {
-            launchLevelSelectionFragment()
+            retryGame()
         }
     }
 
@@ -52,20 +53,20 @@ class FinishGameFragment : Fragment() {
         _binding = null
     }
 
-    private fun parseArgs(){
-        gameResult = requireArguments().getSerializable(KEY_GAME_RESULT) as GameResult
+    private fun parseArgs() {
+        requireArguments().getParcelable<GameResult>(KEY_GAME_RESULT)?.let {
+            gameResult = it
+        }
     }
 
-    private fun retryGame(){
-        requireActivity().supportFragmentManager.popBackStack(GameFragment.NAME, FragmentManager.POP_BACK_STACK_INCLUSIVE)
+    private fun retryGame() {
+        requireActivity().supportFragmentManager.popBackStack(
+            GameFragment.NAME,
+            FragmentManager.POP_BACK_STACK_INCLUSIVE
+        )
     }
 
-    private fun launchLevelSelectionFragment(){
-        requireActivity().supportFragmentManager.beginTransaction()
-            .replace(R.id.main_container,LevelSelectionFragment.newInstance())
-            .addToBackStack(LevelSelectionFragment.NAME)
-            .commit()
-    }
+
     companion object {
 
         private const val KEY_GAME_RESULT = "game_result"
@@ -74,7 +75,7 @@ class FinishGameFragment : Fragment() {
 
             return FinishGameFragment().apply {
                 arguments = Bundle().apply {
-                    putSerializable(KEY_GAME_RESULT, gameResult)
+                    putParcelable(KEY_GAME_RESULT, gameResult)
                 }
             }
         }
