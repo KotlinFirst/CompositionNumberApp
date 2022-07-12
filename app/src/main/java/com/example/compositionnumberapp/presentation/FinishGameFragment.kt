@@ -8,6 +8,8 @@ import android.view.ViewGroup
 import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.LifecycleOwner
+import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
 import com.example.compositionnumberapp.R
 import com.example.compositionnumberapp.databinding.FragmentFinishGameBinding
 import com.example.compositionnumberapp.domain.entity.GameResult
@@ -16,16 +18,12 @@ import java.lang.RuntimeException
 
 class FinishGameFragment : Fragment() {
 
-    private lateinit var gameResult: GameResult
+    private val args by navArgs<FinishGameFragmentArgs>()
 
     private var _binding: FragmentFinishGameBinding? = null
     private val binding: FragmentFinishGameBinding
         get() = _binding ?: throw RuntimeException("FragmentFinishGameBinding = null")
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        parseArgs()
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -37,15 +35,10 @@ class FinishGameFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner,
-            object : OnBackPressedCallback(true) {
-                override fun handleOnBackPressed() {
-                    retryGame()
-                }
-            })
         binding.buttonRetry.setOnClickListener {
             retryGame()
         }
+        bindViews()
     }
 
     override fun onDestroyView() {
@@ -53,31 +46,40 @@ class FinishGameFragment : Fragment() {
         _binding = null
     }
 
-    private fun parseArgs() {
-        requireArguments().getParcelable<GameResult>(KEY_GAME_RESULT)?.let {
-            gameResult = it
-        }
-    }
-
-    private fun retryGame() {
-        requireActivity().supportFragmentManager.popBackStack(
-            GameFragment.NAME,
-            FragmentManager.POP_BACK_STACK_INCLUSIVE
+    private fun bindViews() {
+        binding.ivResult.setImageResource(getSmileResId())
+        binding.needRightAnswers.text = String.format(
+            getString(R.string.need_right_answers),
+            args.result.gameSettings.minCountOfRightAnswers
+        )
+        binding.gameScore.text = String.format(
+            getString(R.string.game_score),
+            args.result.countOfRightAnswer
+        )
+        binding.needPercentRightAnswer.text = String.format(
+            getString(R.string.need_percent_right_answer),
+            args.result.gameSettings.minPercentOfRightAnswers
+        )
+        binding.percentRightAnswer.text = String.format(
+            getString(R.string.percent_right_answer),
+            getPercentOfRightAnswer(args.result.countOfQuestion,args.result.countOfRightAnswer)
         )
     }
 
-
-    companion object {
-
-        private const val KEY_GAME_RESULT = "game_result"
-
-        fun newInstance(gameResult: GameResult): FinishGameFragment {
-
-            return FinishGameFragment().apply {
-                arguments = Bundle().apply {
-                    putParcelable(KEY_GAME_RESULT, gameResult)
-                }
-            }
-        }
+    private fun getPercentOfRightAnswer(countOfQuestions: Int, countOfRightAnswers: Int): Int {
+        if (countOfQuestions == 0) return 0
+        return (countOfRightAnswers * 100 / countOfQuestions)
     }
+
+    private fun getSmileResId(): Int {
+        return if (args.result.winner) {
+            R.drawable.victory
+        } else R.drawable.lost
+    }
+
+
+    private fun retryGame() {
+        findNavController().popBackStack()
+    }
+
 }

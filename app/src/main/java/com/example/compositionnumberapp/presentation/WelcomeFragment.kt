@@ -5,6 +5,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.navigation.fragment.findNavController
 import com.example.compositionnumberapp.R
 import com.example.compositionnumberapp.databinding.FragmentWelcomeBinding
 import java.lang.RuntimeException
@@ -29,24 +30,14 @@ class WelcomeFragment : Fragment() {
         }
     }
 
+    private fun launchLevelSelectionFragment() {
+        findNavController().navigate(R.id.action_welcomeFragment_to_levelSelectionFragment)
+    }
+
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
     }
 
-    private fun launchLevelSelectionFragment() {
-        requireActivity().supportFragmentManager.beginTransaction()
-            .replace(R.id.main_container, LevelSelectionFragment.newInstance())
-            .addToBackStack(LevelSelectionFragment.NAME)
-            .commit()
-    }
 
-    companion object {
-
-        fun newInstance(param1: String, param2: String) =
-            WelcomeFragment().apply {
-                arguments = Bundle().apply {
-                }
-            }
-    }
 }

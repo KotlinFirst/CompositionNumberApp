@@ -5,6 +5,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.navigation.fragment.findNavController
 import com.example.compositionnumberapp.R
 import com.example.compositionnumberapp.databinding.FragmentLevelSelectionBinding
 import com.example.compositionnumberapp.domain.entity.Level
@@ -12,6 +13,7 @@ import java.lang.RuntimeException
 
 
 class LevelSelectionFragment : Fragment() {
+
     private var _binding: FragmentLevelSelectionBinding? = null
     val binding: FragmentLevelSelectionBinding
         get() = _binding ?: throw RuntimeException("FragmentLevelSelectionBinding = null")
@@ -43,10 +45,8 @@ class LevelSelectionFragment : Fragment() {
     }
 
     private fun launchGameFragment(level: Level) {
-        requireActivity().supportFragmentManager.beginTransaction()
-            .replace(R.id.main_container, GameFragment.newInstance(level))
-            .addToBackStack(GameFragment.NAME)
-            .commit()
+        findNavController().navigate(
+            LevelSelectionFragmentDirections.actionLevelSelectionFragmentToGameFragment(level))
     }
 
     override fun onDestroyView() {
@@ -54,9 +54,4 @@ class LevelSelectionFragment : Fragment() {
         _binding = null
     }
 
-    companion object {
-        const val NAME = "LevelSelectionFragment"
-
-        fun newInstance() = LevelSelectionFragment()
-    }
 }

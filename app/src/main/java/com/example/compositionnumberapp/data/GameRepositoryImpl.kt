@@ -4,7 +4,6 @@ import com.example.compositionnumberapp.domain.entity.GameSettings
 import com.example.compositionnumberapp.domain.entity.Level
 import com.example.compositionnumberapp.domain.entity.Question
 import com.example.compositionnumberapp.domain.repository.GameRepository
-import java.lang.Math.random
 import kotlin.math.max
 import kotlin.math.min
 import kotlin.random.Random
