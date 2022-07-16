@@ -12,7 +12,7 @@
     <string name="button_easy_level">Лёгкий</string>
     <string name="button_normal_level">Средний</string>
     <string name="button_hard_level">Сложный</string>
-    <string name="question">/?</string>
+    <string name="question">\?</string>
     <string name="tv_answer_progress">правильных ответов %s (минимум %s)</string>
     <string name="button_finish_fragment">Попробовать снова</string>
     <string name="need_right_answers">Необходимое количество правильных ответов : %s</string>
